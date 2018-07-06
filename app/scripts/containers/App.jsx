@@ -8,6 +8,7 @@ import cx from 'classnames';
 import history from 'modules/history';
 import RoutePublic from 'modules/RoutePublic';
 import RoutePrivate from 'modules/RoutePrivate';
+import RoutePublicTest from 'modules/RoutePublicTest';
 
 import config from 'config';
 import { showAlert } from 'actions';
@@ -15,6 +16,7 @@ import { showAlert } from 'actions';
 import Home from 'routes/Home';
 import Private from 'routes/Private';
 import NotFound from 'routes/NotFound';
+import Test from 'routes/Test';
 
 import Header from 'components/Header';
 import Footer from 'components/Footer';
@@ -58,7 +60,9 @@ export class App extends React.Component {
           {user.isAuthenticated && <Header dispatch={dispatch} user={user} />}
           <main className="app__main">
             <Switch>
-              <RoutePublic isAuthenticated={user.isAuthenticated} path="/" exact component={Home} />
+              <RoutePublic
+                isAuthenticated={user.isAuthenticated} path="/" exact component={Home} />
+              <RoutePublicTest isAuthenticated={true} path="/test" component={Test}/>
               <RoutePrivate isAuthenticated={user.isAuthenticated} path="/private" component={Private} />
               <Route component={NotFound} />
             </Switch>

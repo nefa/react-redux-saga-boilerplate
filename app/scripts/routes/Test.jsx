@@ -1,56 +1,59 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
 import cx from 'classnames';
 
 import config from 'config';
 
-import { login, showAlert } from 'actions';
+import { showAlert, updateCollection } from 'actions';
 import Logo from 'components/Logo';
+import { fetch1, fetch2 } from '../mocks';
+// import { login } from 'actions';
 
-export class Home extends React.PureComponent {
 
-  constructor(props) {
-    super(props);
-    this.handleClickLogin = this.handleClickLogin.bind(this);
-    this.handleClickTest = this.handleClickTest.bind(this);
-  }
+export class Test extends React.PureComponent {
 
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
-    history: PropTypes.shape({
-      push: PropTypes.func.isRequired,
-    }),
-    user: PropTypes.object.isRequired,
+    collection: PropTypes.array.isRequired,
   };
 
-  handleClickLogin(e) {
-    e.preventDefault();
+  static defaultProps = {
+    collection: []
+  }
 
-    this.props.dispatch(login());
+  componentDidMount() {
+    this.logStuff();
   }
 
   handleClickTest(e) {
-    console.log('...from e handler', this.props.history, e);
     e.preventDefault();
 
-    this.props.dispatch(showAlert('Test alert thrown', { type: 'success', icon: 'i-trophy' }));
-    this.props.history.push('/test');
+    this.props.dispatch(showAlert('A new test alert thrown !!', { type: 'success', icon: 'i-trophy' }));
+  }
+
+  async logStuff() {
+    const res1 = await fetch1();
+    const res2 = await fetch2(res1.oldUrl)
+    // console.log(res2);
+    this.props.dispatch(updateCollection(res2.list));
   }
 
   render() {
-    const { user } = this.props;
+    // const { collection } = this.props;
+    console.log("props in Test.jsx", this.props);
 
     return (
-      <div key="Home" className="app__home app__route">
+      <div key="Test" className="app__home app__route">
         <div className="app__container">
           <div className="app__home__wrapper">
             <div className="app__home__header">
               <Logo />
             </div>
-            <h1>{config.description}</h1>
-            <a
+            <h1>Text and more text</h1>
+            {/* <h3>{collection.length}</h3> */}
+            <hr />
+            {/* <a
               href="#login"
               onClick={this.handleClickLogin}
               className={cx('btn btn-lg btn-primary btn-icon', {
@@ -62,13 +65,12 @@ export class Home extends React.PureComponent {
             </a>
             <a href="#test"
               onClick={this.handleClickTest}
-              className={cx('btn btn-lg btn-secondary btn-icon', {
+              className={cx('btn btn-lg btn-danger btn-icon', {
                 'btn-loading': false,
-              })} >
-
+              })}>
               <i className="i-sign-in" />
               <span>Test</span>
-            </a>         
+            </a> */}
           </div>
         </div>
       </div>
@@ -78,7 +80,7 @@ export class Home extends React.PureComponent {
 
 /* istanbul ignore next */
 function mapStateToProps(state) {
-  return { user: state.user };
+  return { collection: state.collection };
 }
 
-export default connect(mapStateToProps)(withRouter(Home));
+export default connect(mapStateToProps)(Test);
