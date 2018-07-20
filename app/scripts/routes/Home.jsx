@@ -8,13 +8,14 @@ import config from 'config';
 
 import { login, showAlert } from 'actions';
 import Logo from 'components/Logo';
+import TestComponent from 'components/TestC';
 
 export class Home extends React.PureComponent {
 
   constructor(props) {
     super(props);
     this.handleClickLogin = this.handleClickLogin.bind(this);
-    this.handleClickTest = this.handleClickTest.bind(this);
+    this.handleClickTestRoute = this.handleClickTestRoute.bind(this);
   }
 
   static propTypes = {
@@ -23,6 +24,7 @@ export class Home extends React.PureComponent {
       push: PropTypes.func.isRequired,
     }),
     user: PropTypes.object.isRequired,
+    userCollection: PropTypes.array.isRequired,
   };
 
   handleClickLogin(e) {
@@ -31,8 +33,7 @@ export class Home extends React.PureComponent {
     this.props.dispatch(login());
   }
 
-  handleClickTest(e) {
-    console.log('...from e handler', this.props.history, e);
+  handleClickTestRoute(e) {
     e.preventDefault();
 
     this.props.dispatch(showAlert('Test alert thrown', { type: 'success', icon: 'i-trophy' }));
@@ -40,7 +41,9 @@ export class Home extends React.PureComponent {
   }
 
   render() {
+    console.log("props in home", this.props);
     const { user } = this.props;
+    const { userCollection } = user;
 
     return (
       <div key="Home" className="app__home app__route">
@@ -61,15 +64,26 @@ export class Home extends React.PureComponent {
               <span>Start</span>
             </a>
             <a href="#test"
+              onClick={this.handleClickTestRoute}
+              className={cx('btn btn-lg btn-secondary btn-icon', {
+                'btn-loading': false,
+              })} >
+
+              <i className="i-sign-in" />
+              <span>Test Route</span>
+            </a>
+
+            <a href="#test"
               onClick={this.handleClickTest}
               className={cx('btn btn-lg btn-secondary btn-icon', {
                 'btn-loading': false,
               })} >
 
               <i className="i-sign-in" />
-              <span>Test</span>
+              <span>Test Local Cpt</span>
             </a>         
           </div>
+          {(userCollection && userCollection.length) ? <TestComponent /> : null}
         </div>
       </div>
     );
@@ -78,6 +92,7 @@ export class Home extends React.PureComponent {
 
 /* istanbul ignore next */
 function mapStateToProps(state) {
+  console.log("connecting home", state);
   return { user: state.user };
 }
 

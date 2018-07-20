@@ -14,8 +14,8 @@ import { fetch1, fetch2 } from '../mocks';
 export class Test extends React.PureComponent {
 
   static propTypes = {
-    dispatch: PropTypes.func.isRequired,
     collection: PropTypes.array.isRequired,
+    dispatch: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -34,13 +34,13 @@ export class Test extends React.PureComponent {
 
   async logStuff() {
     const res1 = await fetch1();
-    const res2 = await fetch2(res1.oldUrl)
+    const res2 = await fetch2(res1.oldUrl);
     // console.log(res2);
     this.props.dispatch(updateCollection(res2.list));
   }
 
   render() {
-    // const { collection } = this.props;
+    const { collection } = this.props;
     console.log("props in Test.jsx", this.props);
 
     return (
@@ -51,7 +51,7 @@ export class Test extends React.PureComponent {
               <Logo />
             </div>
             <h1>Text and more text</h1>
-            {/* <h3>{collection.length}</h3> */}
+            <h3>{collection.length}</h3>
             <hr />
             {/* <a
               href="#login"

@@ -26,6 +26,7 @@ export class App extends React.Component {
   static propTypes = {
     app: PropTypes.object.isRequired,
     dispatch: PropTypes.func.isRequired,
+    test: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired,
   };
 
@@ -40,7 +41,7 @@ export class App extends React.Component {
   }
 
   render() {
-    const { app, dispatch, user } = this.props;
+    const { app, dispatch, user, test } = this.props;
 
     return (
       <ConnectedRouter history={history}>
@@ -62,7 +63,9 @@ export class App extends React.Component {
             <Switch>
               <RoutePublic
                 isAuthenticated={user.isAuthenticated} path="/" exact component={Home} />
-              <RoutePublicTest isAuthenticated={true} path="/test" component={Test}/>
+              <RoutePublicTest
+                isAuthenticated={true} path="/test" exact component={Test}
+                test={test} />
               <RoutePrivate isAuthenticated={user.isAuthenticated} path="/private" component={Private} />
               <Route component={NotFound} />
             </Switch>
@@ -80,6 +83,7 @@ function mapStateToProps(state) {
   return {
     app: state.app,
     user: state.user,
+    test: state.test,
   };
 }
 

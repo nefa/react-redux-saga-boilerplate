@@ -12,7 +12,7 @@ import { ActionTypes } from 'constants/index';
  */
 export function updateCollection(collection: Array<any>): Object {
   return {
-    type: 'UPDATE_COLLECTION',
-    payload: { collection },
+    type: 'UPDATE_COLLECTION_REQUEST',
+    payload: collection,
   };
 }

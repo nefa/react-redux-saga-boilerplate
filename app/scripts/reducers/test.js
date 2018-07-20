@@ -1,4 +1,5 @@
 import immutable from 'immutability-helper';
+import { REHYDRATE } from 'redux-persist/lib/constants';
 import { createReducer } from 'modules/helpers';
 
 // import { ActionTypes } from 'constants/index';
@@ -10,9 +11,20 @@ export const testState = {
 
 export default {
   test: createReducer(testState, {
+    [REHYDRATE](state) {
+      return immutable(state, {
+        collection: { $set: [] },
+      });
+    },
     'TEST_READY'(state) {
       return immutable(state, {
         ready: { $set: true },
+      });
+    },
+    'TEST_FAILED'(state) {
+      return immutable(state, {
+        ready: { $set: false },
+        collection: { $set: [] },
       });
     },
     'TEST_PENDING'(state) {
@@ -20,16 +32,18 @@ export default {
         ready: { $set: false },
       });
     },
-    'UPDATE_COLLECTION'(state, { payload }) {
+    'UPDATE_COLLECTION_REQUEST'(state) {
       return immutable(state, {
-        collection: { $set: payload.collection },
+        ready: { $set: false },
+        collection: { $set: [] },
       });
     },
-    // [ActionTypes.USER_LOGOUT_SUCCESS](state) {
-    //   return immutable(state, {
-    //     isAuthenticated: { $set: false },
-    //     status: { $set: 'idle' },
-    //   });
-    // },
+    'UPDATE_COLLECTION_SUCCESS'(state, { payload }) {
+      return immutable(state, {
+        ready: { $set: true },
+        collection: { $push: payload },
+      });
+      // return { ...state, collection: payload, ready: true };
+    },
   }),
 };

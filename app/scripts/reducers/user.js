@@ -6,6 +6,7 @@ import { ActionTypes } from 'constants/index';
 export const userState = {
   isAuthenticated: false,
   status: 'idle',
+  userCollection: [],
 };
 
 export default {
